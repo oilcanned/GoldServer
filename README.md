@@ -1,6 +1,10 @@
 <p align="center"><img width="200px" src="assets/GoldServer.png"></p>
 <p align="center">A Server Software for Classic Minecraft</p>
 
+# Dependencies
+`OpenSSL` \
+`Curl`
+
 # Compiling
 A simple bash file, `compile`, located in the root of the server, is used for compiling. \
 Give it execute permissions by running ``chmod +x compile`` \
