@@ -6,12 +6,12 @@ A simple bash file, `compile`, located in the root of the server, is used for co
 Give it execute permissions by running ``chmod +x compile`` \
 Compile by running ./compile \
 Alternatively, you can just run ``gcc -s src/*.c -o bin/main -lz -lpthread -lcurl -lm -lssl -lcrypto``
-# Configuring
 
+# Configuring
 The server.properties file provided allows for minor changes to be made to the server. \
 `server_name`       - defines the server name. \
 `server_motd`       - defines the server motd. \
-`port               - defines the server port. \
+`port`              - defines the server port. \
 `autosave_interval` - defines the interval (in seconds) between automatic world saving. \
 `worlds_folder`     - defines the folder in which worlds are stored in. \
 `main_world`        - defines the main world that will be sent to the player when they join. \
