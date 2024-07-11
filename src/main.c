@@ -374,6 +374,22 @@ int main(void) {
 		return 1;
 	}
 
+	for (int i = 0; i < strlen(server_info.worlds_folder); ++i) {
+		if (!isalnum(server_info.worlds_folder[i])) {
+			printf("%sError: worlds folder must only contain alphanumeric characters.\n", AND_C);
+			return 1;
+		} 
+	}
+
+	for (int i = 0; i < strlen(server_info.main_world); ++i) {
+		if (!isalnum(server_info.main_world[i])) {
+			printf("%sError: worlds folder must only contain alphanumeric characters.\n", AND_C);
+			return 1;
+		} 
+	}
+
+	getcwd(cwd, sizeof(cwd));
+
 	signal(SIGINT, onExit);
 
 	memset(worlds, 		 0, sizeof(worlds));

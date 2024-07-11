@@ -35,5 +35,6 @@ extern server_info_t server_info;
 extern commands_t 	 commands;
 extern player_t   	 players[MAX];
 extern world_t    	 worlds[MAX];
+extern char 		 cwd[64];
 
 #pragma once

@@ -205,9 +205,11 @@ char* afterchar(char* src, char character) { /* Used once lol */
 }
 
 int isOp(const char* username) {
-	chdir("..");
-	FILE* file = fopen(OPLIST_FILE, "rb");
-	chdir(server_info.worlds_folder);
+	char oplist_dir[strlen(cwd) + strlen(OPLIST_FILE) + 2];
+	strcpy(oplist_dir, cwd);
+	strcat(oplist_dir, "/");
+	strcat(oplist_dir, OPLIST_FILE);
+	FILE* file = fopen(oplist_dir, "rb");
 
 	if (file == NULL) {
 		printf("ERROR!!! Oplist file was not found!\n");
@@ -233,9 +235,11 @@ int makeOp(int id, const char* username) {
 		return 1;
 	}
 
-	chdir("..");
-	FILE* file = fopen(OPLIST_FILE, "rb");
-	chdir(server_info.worlds_folder);
+	char oplist_dir[strlen(cwd) + strlen(OPLIST_FILE) + 2];
+	strcpy(oplist_dir, cwd);
+	strcat(oplist_dir, "/");
+	strcat(oplist_dir, OPLIST_FILE);
+	FILE* file = fopen(oplist_dir, "rb");
 
 	if (file == NULL) {
 		printf("ERROR!!! Oplist file was not found!\n");
@@ -263,9 +267,7 @@ int makeOp(int id, const char* username) {
 
 	fclose(file);
 
-	chdir("..");
-	file = fopen(OPLIST_FILE, "a");
-	chdir(server_info.worlds_folder);
+	file = fopen(oplist_dir, "a");
 
 	if (file == NULL) {
 		printf("%sError: oplist file was not found.\n", AND_C);
@@ -296,9 +298,11 @@ int deOp(int id, const char* username) {
 		return 1;
 	}
 
-	chdir("..");
-	FILE* file = fopen(OPLIST_FILE, "rb");
-	chdir(server_info.worlds_folder);
+	char oplist_dir[strlen(cwd) + strlen(OPLIST_FILE) + 2];
+	strcpy(oplist_dir, cwd);
+	strcat(oplist_dir, "/");
+	strcat(oplist_dir, OPLIST_FILE);
+	FILE* file = fopen(oplist_dir, "rb");
 
 	if (file == NULL) {
 		printf("%sError: oplist file was not found.\n", AND_C);
@@ -331,9 +335,8 @@ int deOp(int id, const char* username) {
 	}
 
 	fclose(file);
-	chdir("..");
-	file = fopen(OPLIST_FILE, "wb");
-	chdir(server_info.worlds_folder);
+
+	file = fopen(oplist_dir, "wb");
 	fwrite(buffer, strlen(buffer), 1, file);
 	fclose(file);
 
@@ -351,9 +354,11 @@ int deOp(int id, const char* username) {
 }
 
 int opList(int id) {
-	chdir("..");
-	FILE* file = fopen(OPLIST_FILE, "rb");
-	chdir(server_info.worlds_folder);
+	char oplist_dir[strlen(cwd) + strlen(OPLIST_FILE) + 2];
+	strcpy(oplist_dir, cwd);
+	strcat(oplist_dir, "/");
+	strcat(oplist_dir, OPLIST_FILE);
+	FILE* file = fopen(oplist_dir, "rb");
 
 	if (file == NULL) {
 		printf("%sError: oplist file was not found.\n", AND_C);
@@ -378,9 +383,11 @@ int banPlayer(int id, const char* username) {
 		return 1;
 	}
 
-	chdir("..");
-	FILE* file = fopen(BANLIST_FILE, "rb");
-	chdir(server_info.worlds_folder);
+	char banlist_dir[strlen(cwd) + strlen(BANLIST_FILE) + 2];
+	strcpy(banlist_dir, cwd);
+	strcat(banlist_dir, "/");
+	strcat(banlist_dir, BANLIST_FILE);
+	FILE* file = fopen(banlist_dir, "rb");
 
 	if (file == NULL) {
 		printf("ERROR!!! banlist file was not found!\n");
@@ -408,9 +415,7 @@ int banPlayer(int id, const char* username) {
 
 	fclose(file);
 
-	chdir("..");
-	file = fopen(BANLIST_FILE, "a");
-	chdir(server_info.worlds_folder);
+	file = fopen(banlist_dir, "a");
 
 	if (file == NULL) {
 		printf("%sError: banlist file was not found.\n", AND_C);
@@ -436,9 +441,11 @@ int unbanPlayer(int id, const char* username) {
 		return 1;
 	}
 
-	chdir("..");
-	FILE* file = fopen(BANLIST_FILE, "rb");
-	chdir(server_info.worlds_folder);
+	char banlist_dir[strlen(cwd) + strlen(BANLIST_FILE) + 2];
+	strcpy(banlist_dir, cwd);
+	strcat(banlist_dir, "/");
+	strcat(banlist_dir, BANLIST_FILE);
+	FILE* file = fopen(banlist_dir, "rb");
 
 	if (file == NULL) {
 		printf("%sError: banlist file was not found.\n", AND_C);
@@ -471,9 +478,8 @@ int unbanPlayer(int id, const char* username) {
 	}
 
 	fclose(file);
-	chdir("..");
-	file = fopen(BANLIST_FILE, "wb");
-	chdir(server_info.worlds_folder);
+
+	file = fopen(banlist_dir, "wb");
 	fwrite(buffer, strlen(buffer), 1, file);
 	fclose(file);
 
@@ -481,9 +487,11 @@ int unbanPlayer(int id, const char* username) {
 }
 
 int banList(int id) {
-	chdir("..");
-	FILE* file = fopen(BANLIST_FILE, "rb");
-	chdir(server_info.worlds_folder);
+	char banlist_dir[strlen(cwd) + strlen(BANLIST_FILE) + 2];
+	strcpy(banlist_dir, cwd);
+	strcat(banlist_dir, "/");
+	strcat(banlist_dir, BANLIST_FILE);
+	FILE* file = fopen(banlist_dir, "rb");
 
 	if (file == NULL) {
 		printf("%sError: banlist file was not found.\n", AND_C);
@@ -504,15 +512,18 @@ int banList(int id) {
 }
 
 int checkBanned(int id) {
-	chdir("..");
-	FILE* file = fopen("banlist", "rb");
+	char banlist_dir[strlen(cwd) + strlen(BANLIST_FILE) + 2];
+	strcpy(banlist_dir, cwd);
+	strcat(banlist_dir, "/");
+	strcat(banlist_dir, BANLIST_FILE);
+	FILE* file = fopen(banlist_dir, "rb");
+	
 	if (file == NULL) {
 		printf("%sError: banlist file not found. Creating it instead.\n", AND_C);
 		file = fopen("banlist", "w");
 		fclose(file);
 		return 0;
 	}
-	chdir(server_info.worlds_folder);
 
 	char buffer[64];
 	while (fgets(buffer, sizeof(buffer), file)) {
