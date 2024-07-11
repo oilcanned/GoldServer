@@ -11,6 +11,7 @@
 #include <zlib.h>
 #include <ctype.h>
 #include <openssl/md5.h>
+#include <sys/stat.h>
 #include "commands.h"
 #include "structs.h"
 #include "definitions.h"
@@ -380,7 +381,10 @@ int main(void) {
 
 	loadcommands();
 
-	chdir(server_info.worlds_folder);
+	if (chdir(server_info.worlds_folder) != 0) {
+		mkdir(server_info.worlds_folder, 0700);
+		chdir(server_info.worlds_folder);
+	}
 
 	FILE* file = fopen(server_info.main_world, "rb");
 	if (file == NULL)
