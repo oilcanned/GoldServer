@@ -32,10 +32,10 @@ The server.properties file provided allows for minor changes to be made to the s
 - Possibly many more.
 
 # Known Features
-- [x] Multithreaded \
-- [x] Commands \
-- [x] Operator commands \
-- [x] Players can swap worlds \
+- [x] Multithreaded 
+- [x] Commands 
+- [x] Operator commands 
+- [x] Players can swap worlds 
 - [x] Idk what else to add here 
 
 # Commands
