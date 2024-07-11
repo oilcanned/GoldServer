@@ -1,0 +1,1 @@
+gcc -s src/*.c -o bin/main -lz -lpthread -lcurl -lm -lssl -lcrypto
