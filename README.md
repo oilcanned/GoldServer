@@ -6,9 +6,7 @@
 `Curl`
 
 # Compiling
-A simple bash file, `compile`, located in the root of the server, is used for compiling. \
-Give it execute permissions by running ``chmod +x compile`` \
-Compile by running ./compile \
+Run `make` in the root directory. \
 Alternatively, you can just run ``gcc -s src/*.c -o bin/main -lz -lpthread -lcurl -lm -lssl -lcrypto``
 
 # Configuring
