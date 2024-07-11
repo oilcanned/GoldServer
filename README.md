@@ -3,7 +3,8 @@
 
 # Dependencies
 `OpenSSL` \
-`Curl`
+`Curl` \
+`zlib`
 
 # Compiling
 Run `make` in the root directory. \
