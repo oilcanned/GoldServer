@@ -7,5 +7,4 @@
 
 #ifdef _WIN32
 	#define pthread_exit(NULL) ExitThread(0)
-	#define pthread_exit ExitThread
 #endif
