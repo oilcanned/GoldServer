@@ -37,7 +37,11 @@
 	}
 }
 
-void* handle(void* arg) {
+#ifdef __linux__
+	void* handle(void* arg) {
+#elif _WIN32
+	DWORD WINAPI handle(void* arg) {
+#endif
 	int id = *(int*)arg;
 
 	players[id].playerId 	   = id;
