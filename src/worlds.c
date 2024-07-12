@@ -4,10 +4,10 @@
 #include <zlib.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include <netinet/in.h>
 #include "definitions.h"
 #include "structs.h"
 #include "functions.h"
+#include "socket.h"
 
 int buildworld(int id, const char* name, int16_t xSize, int16_t ySize, int16_t zSize) {
 	for (int i = 0; i < strlen(name); ++i) {

@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <dirent.h>
-#include <netinet/in.h>
+#include "socket.h"
 #include "worlds.h"
 #include "definitions.h"
 #include "functions.h"

@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <inttypes.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
 #include <pthread.h>
 #include <signal.h>
 #include <zlib.h>
@@ -19,6 +17,7 @@
 #include "worlds.h"
 #include "functions.h"
 #include "lexer.h"
+#include "socket.h"
 
 void* sendPlayerPositions(void* arg) {
 	int id = *(int*)arg;

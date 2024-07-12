@@ -1,14 +1,15 @@
 #include <stdint.h>
 #define MAX_BLOCK_UPDATES 2097152
 #define MAX 127
-#define Byte   uint8_t
-#define SByte  int8_t
-#define FByte  int8_t
-#define Short  int16_t
-#define FShort int16_t
-#define String char
-#define ByteArray uint8_t
 #pragma once
+
+typedef char 	String[64];
+typedef uint8_t Byte;
+typedef int8_t  SByte;
+typedef int8_t  FByte;
+typedef int16_t Short;
+typedef int16_t FShort;
+typedef uint8_t ByteArray[1024];
 
 // Client -> Server packets
 // Packet IDs are NOT included.
@@ -16,8 +17,8 @@
 /* Player Identification */
 struct __attribute__((packed)) client0x00_t {
 	Byte   protocolVersion;
-	String username[64];
-	String mpass[64];
+	String username;
+	String mpass;
 	Byte   unused;
 };
 
@@ -43,18 +44,18 @@ struct __attribute__((packed)) client0x08_t {
 /* Message */
 struct __attribute__((packed)) client0x0d_t {
 	SByte playerId;
-	String message[64];
+	String message;
 };
 
 /* ExtInfo */
 struct __attribute__((packed)) client0x10_t {
-	String appName[64];
+	String appName;
 	Short  extensionCount;
 };
 
 /* ExtEntry */
 struct __attribute__((packed)) client0x11_t {
-	String extName[64];
+	String extName;
 	int    version;
 };
 
@@ -64,8 +65,8 @@ struct __attribute__((packed)) client0x11_t {
 struct __attribute__((packed)) server0x00_t {
 	Byte   packetId;
 	Byte   protocolVersion;
-	String serverName[64];
-	String serverMotd[64];
+	String serverName;
+	String serverMotd;
 	Byte   userType;
 };
 
@@ -83,7 +84,7 @@ struct __attribute__((packed)) server0x02_t {
 struct __attribute__((packed)) server0x03_t {
 	Byte  	  packetId;
 	Short 	  chunkLength;
-	ByteArray chunkData[1024];
+	ByteArray chunkData;
 	Byte 	  percentComplete;
 };
 
@@ -108,7 +109,7 @@ struct __attribute__((packed)) server0x06_t {
 struct __attribute__((packed)) server0x07_t {
 	Byte   packetId;
 	SByte  playerId;
-	String playerName[64];
+	String playerName;
 	FShort x;
 	FShort y;
 	FShort z;
@@ -165,13 +166,13 @@ struct __attribute__((packed)) server0x0c_t {
 struct __attribute__((packed)) server0x0d_t {
 	Byte   packetId;
 	SByte  playerId;
-	String message[64];
+	String message;
 };
 
 /* Disconnect Player */
 struct __attribute__((packed)) server0x0e_t {
 	Byte   packetId;
-	String disconnectReason[64];
+	String disconnectReason;
 };
 
 /* Update User Type */
@@ -183,14 +184,14 @@ struct __attribute__((packed)) server0x0f_t {
 /* ExtInfo */
 struct __attribute__((packed)) server0x10_t {
 	Byte   packetId;
-	String appName[64];
+	String appName;
 	Short  extensionCount;
 };
 
 /* ExtEntry */
 struct __attribute__((packed)) server0x11_t {
 	Byte   packetId;
-	String extName[64];
+	String extName;
 	int    version;
 };
 
