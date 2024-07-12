@@ -5,6 +5,7 @@
 #include "structs.h"
 #include "worlds.h"
 #include "functions.h"
+#include "threads.h"
 
 #ifdef __linux__
 	void* heartbeat(void* arg) {

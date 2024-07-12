@@ -1,4 +1,5 @@
 #include "definitions.h"
+#include "threads.h"
 
 #ifdef __linux__
 	void* heartbeat(void* arg);
