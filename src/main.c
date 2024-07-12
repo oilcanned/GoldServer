@@ -8,7 +8,7 @@
 #include <signal.h>
 #include <zlib.h>
 #include <ctype.h>
-#include <openssl/md5.h>
+#include <openssl/evp.h>
 #include <sys/stat.h>
 #include "commands.h"
 #include "structs.h"
@@ -141,21 +141,33 @@ void* handle(void* arg) {
 					unpad(tempUsername);
 
 					char saltAndName[strlen(server_info.salt) + strlen(tempUsername) + 1];
-					unsigned char* md = (unsigned char*)malloc(MD5_DIGEST_LENGTH);
 					strcpy(saltAndName, server_info.salt);
 					strcat(saltAndName, tempUsername);
 
-					MD5_CTX ctx;
-					MD5_Init(&ctx);
-					MD5_Update(&ctx, saltAndName, strlen(saltAndName));
-					MD5_Final(md, &ctx);
+					// Following md5 code has been replaced.
+					// Originally the deprecated version, but
+					// I didn't know the new one, so I used:
+					// https://stackoverflow.com/a/71643121
 
-					char mdString[MD5_DIGEST_LENGTH * 2 + 1];
-					for (int i = 0; i < MD5_DIGEST_LENGTH; i++) {
-						sprintf(&mdString[i * 2], "%02x", md[i]);
+					EVP_MD_CTX* ctx;
+					unsigned char* md5_digest;
+					unsigned int   md5_digest_len = EVP_MD_size(EVP_md5());
+
+					ctx = EVP_MD_CTX_new();
+					EVP_DigestInit_ex(ctx, EVP_md5(), NULL);
+
+					EVP_DigestUpdate(ctx, saltAndName, strlen(saltAndName));
+
+					md5_digest = (unsigned char*)OPENSSL_malloc(md5_digest_len);
+					EVP_DigestFinal_ex(ctx, md5_digest, &md5_digest_len);
+					EVP_MD_CTX_free(ctx);
+
+					char mdString[md5_digest_len * 2 + 1];
+					for (int i = 0; i < md5_digest_len; i++) {
+						sprintf(&mdString[i * 2], "%02x", md5_digest[i]);
 					}
 
-					mdString[MD5_DIGEST_LENGTH * 2] = 0;
+					mdString[md5_digest_len * 2] = 0;
 
 					if (strcmp(mdString, client0x00.mpass) != 0) {
 						disconnectPlayer(id, "Invalid player key, forged username.");
