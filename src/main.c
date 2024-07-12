@@ -56,10 +56,16 @@
 	players[id].server0x08.pitch	= 0;
 	players[id].server0x08.yaw 		= 0;
 
-	{
-		pthread_t t;
-		pthread_create(&t, NULL, sendPlayerPositions, arg);
-	}
+	#ifdef __linux__
+		{
+			pthread_t t;
+			pthread_create(&t, NULL, sendPlayerPositions, arg);
+		}
+	#elif _WIN32
+		{
+			HANDLE t = CreateThread(NULL, 0, sendPlayerPositions, arg, 0, NULL);
+		}
+	#endif
 
 	// Create client structures.
 	struct client0x00_t client0x00;
