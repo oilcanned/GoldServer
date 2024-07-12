@@ -1,4 +1,3 @@
-#include <unistd.h>
 #include <string.h>
 #include <curl/curl.h>
 #include "heartbeat.h"
@@ -6,6 +5,7 @@
 #include "worlds.h"
 #include "functions.h"
 #include "threads.h"
+#include "unistd.h"
 
 #ifdef __linux__
 	void* heartbeat(void* arg) {
@@ -51,7 +51,11 @@
 		curl_easy_setopt(curl, CURLOPT_NOBODY, 		   1);
 		curl_easy_perform(curl);
 
-		sleep(45);
+		#ifdef __linux__
+			sleep(45);
+		#elif _WIN32
+			sleep(45 * 1000);
+		#endif
 	}
 }
 
@@ -64,7 +68,11 @@
 	resetColour();
 	
 	while (1) {
-		sleep(server_info.autosave_interval);
+		#ifdef __linux__
+			sleep(server_info.autosave_interval);
+		#elif _WIN32
+			sleep(server_info.autosave_interval * 1000);
+		#endif
 
 		for (int i = 0; i < MAX; ++i) {
 			if (players[i].sock)

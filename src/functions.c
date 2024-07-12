@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
 #include <time.h>
 #include "functions.h"
@@ -8,6 +7,7 @@
 #include "structs.h"
 #include "worlds.h"
 #include "socket.h"
+#include "unistd.h"
 
 // This entire file is a disgrace and i hate looking through it
 // If you are not me and you are reading this, i am so so sorry

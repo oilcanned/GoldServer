@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <unistd.h>
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
@@ -18,6 +17,7 @@
 #include "lexer.h"
 #include "socket.h"
 #include "threads.h"
+#include "unistd.h"
 
 #ifdef __linux__
 	void* sendPlayerPositions(void* arg) {
