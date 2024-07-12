@@ -19,7 +19,8 @@ The server.properties file provided allows for minor changes to be made to the s
 `worlds_folder`     - defines the folder in which worlds are stored in. \
 `main_world`        - defines the main world that will be sent to the player when they join. \
 `heartbeat_url`     - defines the URL for the heartbeat, allowing the server to be shown on the server list. \
-`public`            - defines whether the server is shown on the server list or not. 
+`public`            - defines whether the server is shown on the server list or not. \
+The default hearbeat is the ClassiCube heartbeat.
 
 > [!NOTE]
 > The code is very rushed. If you see any _interesting_ code, please alert me.
