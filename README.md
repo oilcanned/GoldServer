@@ -38,7 +38,9 @@ The server.properties file provided allows for minor changes to be made to the s
 - [x] Multithreaded 
 - [x] Commands 
 - [x] Operator commands 
-- [x] Players can swap worlds 
+- [x] Players can swap worlds
+- [x] Supports extra block types
+- [x] Supports message types 
 - [x] Idk what else to add here 
 
 # Commands
