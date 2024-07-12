@@ -364,7 +364,7 @@ void* handle(void* arg) {
 }
 
 int main(void) {
-	socklen_t size;
+	unsigned int size;
 	struct sockaddr_in server;
 	int sock;
 
@@ -397,7 +397,12 @@ int main(void) {
 	loadcommands();
 
 	if (chdir(server_info.worlds_folder) != 0) {
-		mkdir(server_info.worlds_folder, 0700);
+		#ifdef __linux__
+			mkdir(server_info.worlds_folder, 0700);
+		#elif _WIN32
+			mkdir(server_info.worlds_folder);
+		#endif
+
 		chdir(server_info.worlds_folder);
 	}
 
