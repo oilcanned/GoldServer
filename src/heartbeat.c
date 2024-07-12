@@ -6,7 +6,11 @@
 #include "worlds.h"
 #include "functions.h"
 
-void* heartbeat(void* arg) {
+#ifdef __linux__
+	void* heartbeat(void* arg) {
+#elif _WIN32
+	DWORD WINAPI heartbeat(void* arg) {
+#endif
 	printf("%sHeartbeat started.\n", AND_6);
 	resetColour();
 	pointers_t* arguments = (pointers_t*)arg;
@@ -50,7 +54,11 @@ void* heartbeat(void* arg) {
 	}
 }
 
-void* autosaver(void* arg) {
+#ifdef __linux__
+	void* autosaver(void* arg) {
+#elif _WIN32
+	DWORD WINAPI autosaver(void* arg) {
+#endif
 	printf("%sBegan autosave thread.\n", AND_6);
 	resetColour();
 	

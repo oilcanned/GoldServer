@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <inttypes.h>
-#include <pthread.h>
 #include <signal.h>
 #include <zlib.h>
 #include <ctype.h>
@@ -18,8 +17,13 @@
 #include "functions.h"
 #include "lexer.h"
 #include "socket.h"
+#include "threads.h"
 
-void* sendPlayerPositions(void* arg) {
+#ifdef __linux__
+	void* sendPlayerPositions(void* arg) {
+#elif _WIN32
+	DWORD WINAPI sendPlayerPositions(void* arg) {
+#endif
 	int id = *(int*)arg;
 
 	while (1) {
@@ -451,15 +455,25 @@ int main(void) {
 	printf("%sReady, using port %d.\n", AND_3, server_info.port);
 	resetColour();
 
-	if (server_info.public) {
-		pthread_t t;
-		pthread_create(&t, NULL, heartbeat, NULL);
-	}
+	#ifdef __linux__
+		if (server_info.public) {
+			pthread_t t;
+			pthread_create(&t, NULL, heartbeat, NULL);
+		}
 
-	{
-		pthread_t t;
-		pthread_create(&t, NULL, autosaver, NULL);
-	}
+		{
+			pthread_t t;
+			pthread_create(&t, NULL, autosaver, NULL);
+		}
+	#elif _WIN32
+		if (server_info.public) {
+			HANDLE t = CreateThread(NULL, 0, heartbeat, NULL, 0, NULL);
+		}
+
+		{
+			HANDLE t = CreateThread(NULL, 0, autosaver, NULL, 0, NULL);
+		}
+	#endif
 
 	while (1) {
 		int cxn = accept(sock, (struct sockaddr*)&server, &size);
@@ -470,9 +484,14 @@ int main(void) {
 
 		for (int i = 0; i < MAX; ++i) {
 			if (players[i].sock == 0) {
-				pthread_t t;
-				players[i].sock = cxn;
-				pthread_create(&t, NULL, handle, (void*)&i);
+				#ifdef __linux__
+					pthread_t t;
+					players[i].sock = cxn;
+					pthread_create(&t, NULL, handle, (void*)&i);
+				#elif _WIN32
+					players[i].sock = cxn;
+					HANDLE t = CreateThread(NULL, 0, handle, (void*)&i, 0, NULL);
+				#endif
 				break;
 			}
 		}
