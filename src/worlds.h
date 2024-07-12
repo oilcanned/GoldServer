@@ -1,3 +1,4 @@
+#include <stdint.h>
 int buildworld(int16_t id, const char* name, int16_t xSize, int16_t ySize, int16_t zSize);
 int loadworld (int16_t id, const char* name);
 int saveworld (int16_t id, int waiting);
