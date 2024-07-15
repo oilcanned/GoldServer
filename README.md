@@ -20,6 +20,7 @@ The server.properties file provided allows for minor changes to be made to the s
 `main_world`        - defines the main world that will be sent to the player when they join. \
 `heartbeat_url`     - defines the URL for the heartbeat, allowing the server to be shown on the server list. \
 `public`            - defines whether the server is shown on the server list or not. \
+`cracked`           - defines whether players need a valid mpass to join thes server. \
 The default hearbeat is the ClassiCube heartbeat.
 
 > [!NOTE]
