@@ -146,10 +146,9 @@
 		switch (packetId) {
 			case 0x00:
 				recv(players[id].sock, &client0x00, sizeof(client0x00), MSG_WAITALL);
+				unpad(client0x00.mpass);
 
-				{
-					unpad(client0x00.mpass);
-
+				if (!server_info.cracked) {
 					char tempUsername[64];
 					memcpy(tempUsername, client0x00.username, 64);
 					unpad(tempUsername);

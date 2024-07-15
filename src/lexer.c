@@ -145,6 +145,18 @@ int lexerMain() {
 					server_info.public = 1;
 				else
 					server_info.public = 0;
+			} else if (strcmp(tokens[i].data, "cracked") == 0) {
+				++i;
+				if (tokens[i++].type != TYPE_EQUALS) return 1;
+				if (tokens[i].type   != TYPE_DATA)   return 1;
+
+				if (strcmp(tokens[i].data, "true") == 0)
+					server_info.cracked = 1;
+				else
+					server_info.cracked = 0;
+			} else {
+				printf("%sUnknown token in server.properties, \"%s\".\n", AND_C, tokens[i].data);
+				return 1;
 			}
 		}
 	}

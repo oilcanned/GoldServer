@@ -246,6 +246,7 @@ typedef struct server_info_t {
 	char heartbeat_url[128];
 	int  autosave_interval;
 	int  public;
+	int  cracked;
 
 	char salt[17];
 } server_info_t;
