@@ -29,7 +29,7 @@
 	while (1) {
 		for (int i = 0; i < MAX; ++i) {
 			if (players[i].sock && i != id && players[id].currentWorldId == players[i].currentWorldId) {
-				send(players[i].sock, &players[id].server0x08, sizeof(players[id].server0x08), 0);
+				send(players[i].sock, (char*)&players[id].server0x08, sizeof(players[id].server0x08), 0);
 			}
 		}
 
@@ -96,7 +96,7 @@
 
 	while (1) {
 		uint8_t packetId;
-		if (recv(players[id].sock, &packetId, 1, MSG_WAITALL) < 1) {
+		if (recv(players[id].sock, (char*)&packetId, 1, MSG_WAITALL) < 1) {
 			players[id].sock = 0;
 			server0x0c.playerId = id;
 
@@ -109,7 +109,7 @@
 				for (int i = 0; i < MAX; ++i)
 					if (players[i].sock) {
 						sendMessage(0, i, buffer);
-						send(players[i].sock, &server0x0c, sizeof(server0x0c), 0);
+						send(players[i].sock, (char*)&server0x0c, sizeof(server0x0c), 0);
 					}
 				
 				printMessage(buffer);
@@ -145,7 +145,7 @@
 		top:
 		switch (packetId) {
 			case 0x00:
-				recv(players[id].sock, &client0x00, sizeof(client0x00), MSG_WAITALL);
+				recv(players[id].sock, (char*)&client0x00, sizeof(client0x00), MSG_WAITALL);
 				unpad(client0x00.mpass);
 
 				if (!server_info.cracked) {
@@ -223,7 +223,7 @@
 				padcpy(server0x00.serverMotd, server_info.server_motd);
 				server0x00.userType = 0x00;
 
-				send(players[id].sock, &server0x00, sizeof(server0x00), 0);
+				send(players[id].sock, (char*)&server0x00, sizeof(server0x00), 0);
 
 				if (sendworld(players[id].currentWorldId, id))
 					pthread_exit(NULL);
@@ -243,14 +243,14 @@
 
 				if (isOp(players[id].username)) {
 					server0x0f.userType = 0x64;
-					send(players[id].sock, &server0x0f, sizeof(server0x0f), 0);
+					send(players[id].sock, (char*)&server0x0f, sizeof(server0x0f), 0);
 					
 					players[id].opStatus = server0x0f.userType;
 
 					sendMessage(0, id, "&cWelcome, operator!");
 				} else {
 					server0x0f.userType = 0x00;
-					send(players[id].sock, &server0x0f, sizeof(server0x0f), 0);
+					send(players[id].sock, (char*)&server0x0f, sizeof(server0x0f), 0);
 
 					players[id].opStatus = server0x0f.userType;
 				}
@@ -263,29 +263,29 @@
 				strcat(combinedSoftwareName, " &f");
 				strcat(combinedSoftwareName, SOFTWARE_VERSION);
 				padcpy(server0x10.appName, combinedSoftwareName);
-				send(players[id].sock, &server0x10, sizeof(server0x10), 0);
+				send(players[id].sock, (char*)&server0x10, sizeof(server0x10), 0);
 
 				padcpy(server0x11.extName, "CustomBlocks");
 				server0x11.version = htonl(1);
-				send(players[id].sock, &server0x11, sizeof(server0x11), 0);
+				send(players[id].sock, (char*)&server0x11, sizeof(server0x11), 0);
 
 				padcpy(server0x11.extName, "MessageTypes");
 				server0x11.version = htonl(1);
-				send(players[id].sock, &server0x11, sizeof(server0x11), 0);
+				send(players[id].sock, (char*)&server0x11, sizeof(server0x11), 0);
 
 				uint8_t tempRecv;
 				int exit = 0;
-				while (recv(players[id].sock, &tempRecv, 1, MSG_WAITALL)) {
+				while (recv(players[id].sock, (char*)&tempRecv, 1, MSG_WAITALL)) {
 					switch (tempRecv) {
 						case 0x10:
-							recv(players[id].sock, &client0x10, sizeof(client0x10), MSG_WAITALL);
+							recv(players[id].sock, (char*)&client0x10, sizeof(client0x10), MSG_WAITALL);
 							break;
 						case 0x11:
-							recv(players[id].sock, &client0x11, sizeof(client0x11), MSG_WAITALL);
+							recv(players[id].sock, (char*)&client0x11, sizeof(client0x11), MSG_WAITALL);
 							break;
 						default:
 							server0x13.supportLevel = 1;
-							send(players[id].sock, &server0x13, sizeof(server0x13), 0);
+							send(players[id].sock, (char*)&server0x13, sizeof(server0x13), 0);
 
 							packetId = tempRecv;
 							goto top;
@@ -295,7 +295,7 @@
 
 				break;
 			case 0x05:
-				recv(players[id].sock, &client0x05, sizeof(client0x05), MSG_WAITALL);
+				recv(players[id].sock, (char*)&client0x05, sizeof(client0x05), MSG_WAITALL);
 				
 				server0x06.blockType = 0;
 
@@ -314,12 +314,12 @@
 				
 				for (int i = 0; i < MAX; ++i)
 					if (players[i].sock && players[id].currentWorldId == players[i].currentWorldId) {
-						send(players[i].sock, &server0x06, sizeof(server0x06), 0);
+						send(players[i].sock, (char*)&server0x06, sizeof(server0x06), 0);
 					}
 
 				break;
 			case 0x08:
-				recv(players[id].sock, &client0x08, sizeof(client0x08), MSG_WAITALL);
+				recv(players[id].sock, (char*)&client0x08, sizeof(client0x08), MSG_WAITALL);
 
 				players[id].server0x08.playerId = id;
 				players[id].server0x08.x	    = client0x08.x;
@@ -330,7 +330,7 @@
 				
 				break;
 			case 0x0d:
-				recv(players[id].sock, &client0x0d, sizeof(client0x0d), MSG_WAITALL);
+				recv(players[id].sock, (char*)&client0x0d, sizeof(client0x0d), MSG_WAITALL);
 				char stringSpaceCut[128];
 				memset(stringSpaceCut, 0, 128);
 

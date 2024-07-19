@@ -19,6 +19,7 @@ int generatesalt() {
 	for (int i = 0; i < 16; ++i)
 		server_info.salt[i] = ALPHABET[rand() % strlen(ALPHABET)];
 	server_info.salt[16] = 0;
+	return 0;
 }
 
 int getBlock(int id, int16_t x, int16_t y, int16_t z) {
@@ -89,7 +90,7 @@ int sendMessage(int type, int id, const char* message) {
 				server0x0d.message[63] = 32;
 			}
 
-			send(players[id].sock, &server0x0d, sizeof(server0x0d), 0);
+			send(players[id].sock, (char*)&server0x0d, sizeof(server0x0d), 0);
 			memset(server0x0d.message, 32, sizeof(server0x0d.message));
 		}
 		server0x0d.message[i % 64] = message[i];
@@ -178,7 +179,7 @@ int disconnectPlayer(int id, const char* message) {
 		for (int i = 0; i < MAX; ++i)
 			if (players[i].sock && i != id) {
 				sendMessage(0, i, buffer);
-				send(players[i].sock, &server0x0c, sizeof(server0x0c), 0);
+				send(players[i].sock, (char*)&server0x0c, sizeof(server0x0c), 0);
 			}
 	
 		printMessage(buffer);
@@ -187,7 +188,7 @@ int disconnectPlayer(int id, const char* message) {
 
 	memset(server0x0e.disconnectReason, 32, sizeof(server0x0e.disconnectReason));
 	padcpy(server0x0e.disconnectReason, message);
-	send(players[id].sock, &server0x0e, sizeof(server0x0e), 0);
+	send(players[id].sock, (char*)&server0x0e, sizeof(server0x0e), 0);
 
 	close(players[id].sock);
 	players[id].sock = 0;
@@ -285,7 +286,7 @@ int makeOp(int id, const char* username) {
 			struct server0x0f_t server0x0f;
 			server0x0f.packetId = 0x0f;
 			server0x0f.userType = 0x64;
-			send(players[i].sock, &server0x0f, sizeof(server0x0f), 0);
+			send(players[i].sock, (char*)&server0x0f, sizeof(server0x0f), 0);
 			sendMessage(0, i, "&aYou have been opped!");
 		}
 
@@ -346,7 +347,7 @@ int deOp(int id, const char* username) {
 			struct server0x0f_t server0x0f;
 			server0x0f.packetId = 0x0f;
 			server0x0f.userType = 0x00;
-			send(players[i].sock, &server0x0f, sizeof(server0x0f), 0);
+			send(players[i].sock, (char*)&server0x0f, sizeof(server0x0f), 0);
 			sendMessage(0, i, "&cYou have been deopped!");
 		}
 	

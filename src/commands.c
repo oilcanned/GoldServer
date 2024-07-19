@@ -21,6 +21,8 @@ int command_help(char (*arguments_ptr)[64][64], player_t* player) {
 			sendMessage(0, player->playerId, toSend);
 		}
 	}
+
+	return 0;
 }
 
 int command_create(char (*arguments_ptr)[64][64], player_t* player) {
@@ -48,6 +50,8 @@ int command_create(char (*arguments_ptr)[64][64], player_t* player) {
 			}
 		}
 	}
+
+	return 0;
 }
 
 int command_delete(char (*arguments_ptr)[64][64], player_t* player) {
@@ -86,6 +90,8 @@ int command_delete(char (*arguments_ptr)[64][64], player_t* player) {
 			}
 		}
 	}
+
+	return 0;
 }
 
 int command_load(char (*arguments_ptr)[64][64], player_t* player) {
@@ -106,6 +112,8 @@ int command_load(char (*arguments_ptr)[64][64], player_t* player) {
 			break;
 		}
 	}
+
+	return 0;
 }
 
 int command_goto(char (*arguments_ptr)[64][64], player_t* player) {
@@ -134,6 +142,7 @@ int command_stop(char (*arguments_ptr)[64][64], player_t* player) {
 	}
 
 	onExit(0);
+	return 0;
 }
 
 int command_list(char (*arguments_ptr)[64][64], player_t* player) {
@@ -152,7 +161,7 @@ int command_list(char (*arguments_ptr)[64][64], player_t* player) {
 
 	DIR* dir = opendir(".");
 	struct dirent* d;
-	while (d = readdir(dir)) {
+	while ((d = readdir(dir))) {
 		int  loaded = 0;
 
 		if (d->d_name[0] == '.')
@@ -173,6 +182,8 @@ int command_list(char (*arguments_ptr)[64][64], player_t* player) {
 		}
 
 	}
+
+	return 0;
 }
 
 int command_kick(char (*arguments_ptr)[64][64], player_t* player) {
