@@ -13,6 +13,8 @@
 // If you are not me and you are reading this, i am so so sorry
 // I won't be paying for your therapy tho that's on you
 
+// The following is the definition of "If it works, don't change it"
+
 int generatesalt() {
 	time_t t;
 	srand(time(&t) * 23);
@@ -103,59 +105,15 @@ void printMessage(const char* message) {
 	printf("\033[0m");
 	for (int i = 0; i < strlen(message); ++i) {
 		if (message[i] == '&') {
-			switch (message[++i]) { // a pretty stupid thing to write ngl
-				case '0':
-					printf(AND_0);
-					break;
-				case '1':
-					printf(AND_1);
-					break;
-				case '2':
-					printf(AND_2);
-					break;
-				case '3':
-					printf(AND_3);
-					break;
-				case '4':
-					printf(AND_4);
-					break;
-				case '5':
-					printf(AND_5);
-					break;
-				case '6':
-					printf(AND_6);
-					break;
-				case '7':
-					printf(AND_7);
-					break;
-				case '8':
-					printf(AND_8);
-					break;
-				case '9':
-					printf(AND_9);
-					break;
-				case 'a':
-					printf(AND_A);
-					break;
-				case 'b':
-					printf(AND_B);
-					break;
-				case 'c':
-					printf(AND_C);
-					break;
-				case 'd':
-					printf(AND_D);
-					break;
-				case 'e':
-					printf(AND_E);
-					break;
-				case 'f':
-					printf(AND_F);
-					break;
-				default:
-					printf("&%c", message[i]);
-					break;
-			}
+			++i;
+			const char* colourStrings[] = {
+				AND_0, AND_1, AND_2, AND_3, AND_4, AND_5, AND_6, AND_7, AND_8, AND_9,
+				AND_A, AND_B, AND_C, AND_D, AND_E, AND_F
+			};
+
+			const char colourCode[] = {message[i], 0};
+
+			printf("%s", colourStrings[strtol(colourCode, NULL, 16)]);
 		} else
 			putchar(message[i]);
 	}
