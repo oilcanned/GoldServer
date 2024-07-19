@@ -8,7 +8,7 @@
 
 # Compiling
 > [!WARNING]
-> Compiling on Windows does not work yet, however, I am currently in the process of fixing that.
+> Compiling on Windows MIGHT work, however for me, it results in an exec format error.
 
 Run `make` in the root directory. \
 Alternatively, you can just run ``gcc -s src/*.c -o bin/main -lz -lpthread -lcurl -lm -lssl -lcrypto``
