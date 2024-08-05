@@ -148,6 +148,17 @@
 				recv(players[id].sock, (char*)&client0x00, sizeof(client0x00), MSG_WAITALL);
 				unpad(client0x00.mpass);
 
+				#ifdef __linux__
+					{
+						pthread_t t;
+						pthread_create(&t, NULL, ping, (void*)&players[id].sock);
+					}
+				#elif _WIN32
+					{
+						HANDLE t = CreateThread(NULL, 0, ping, (void*)&players[id].sock, 0, NULL);
+					}
+				#endif
+
 				if (!server_info.cracked) {
 					char tempUsername[64];
 					memcpy(tempUsername, client0x00.username, 64);
@@ -299,12 +310,25 @@
 				
 				server0x06.blockType = 0;
 
-				if (client0x05.mode)
+				if (client0x05.mode || players[id].paint)
 					server0x06.blockType = client0x05.blockType;
 				
 				server0x06.x = client0x05.x;
 				server0x06.y = client0x05.y;
 				server0x06.z = client0x05.z;
+
+				for (int i = 0; i < MAX_BLOCK_UPDATES; ++i) {
+					if (i == MAX_BLOCK_UPDATES - 1)
+						if (worlds[players[id].currentWorldId].blockChanges[i].packetId != 0) {
+							for (int j = 0; j < MAX; ++j) {
+								if (worlds[j].name) {
+									saveworld(j, 0);
+									memset(&worlds[players[id].currentWorldId].blockChanges, 0, sizeof(worlds[players[id].currentWorldId].blockChanges));
+									printf("World %s has reached its max blocks. Resetting.\n", worlds[players[id].currentWorldId].name);
+								}
+							}
+						}
+				}
 
 				for (int i = 0; i < MAX_BLOCK_UPDATES; ++i)
 					if (worlds[players[id].currentWorldId].blockChanges[i].packetId == 0) {
@@ -381,6 +405,8 @@
 					for (int i = 0; i < MAX; ++i)
 						if (players[i].sock)
 							sendMessage(0, i, buffer);
+					
+					free(buffer);
 				}
 
 				break;

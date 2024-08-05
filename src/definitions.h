@@ -3,7 +3,7 @@
 #define MAX  127 // This is seperately defined in structs.h because i'm an idiot
 #define HTTP "HTTP 501\nContent-Type: text/plain\n\nGoldServer - players online:\n"
 #define CHUNK_SIZE 		  1024
-#define MAX_BLOCK_UPDATES 2097152
+#define MAX_BLOCK_UPDATES 32000 // This is seperately defined in structs.h because i'm an idiot
 #define ALPHABET 	   "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
 #define BANLIST_FILE   "banlist"
 #define IPBANLIST_FILE "ipbanlist"

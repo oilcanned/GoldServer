@@ -1,5 +1,5 @@
 #include <stdint.h>
-#define MAX_BLOCK_UPDATES 2097152
+#define MAX_BLOCK_UPDATES 32000
 #define MAX 127
 #pragma once
 
@@ -229,6 +229,7 @@ typedef struct player_t {
 	int  	sock;
 	struct  server0x08_t server0x08;
 	uint8_t opStatus;
+	uint8_t paint;
 } player_t;
 
 typedef struct commands_t {

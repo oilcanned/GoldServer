@@ -359,6 +359,56 @@ int command_banlist(char (*arguments_ptr)[64][64], player_t* player) {
 	return 0;	
 }
 
+int command_me(char (*arguments_ptr)[64][64], player_t* player) {
+	char arguments[64][64];
+	char message[64];
+	memcpy(arguments, arguments_ptr, sizeof(char[64][64]));
+	memset(message, 0, 64);
+
+	if (!arguments[1][0]) {
+		sendMessage(0, player->playerId, "&c/me needs an input.");
+		return 1;
+	}
+
+	strcpy(message, "* ");
+	strcat(message, player->username);
+
+	for (int i = 1; arguments[i][0]; ++i) {
+		strcat(message, " ");
+		strcat(message, arguments[i]);
+	}
+
+	for (int i = 0; i < MAX; ++i)
+		sendMessage(0, i, message);
+	
+	printMessage(message);
+
+	return 0;
+}
+
+int command_paint(char (*arguments_ptr)[64][64], player_t* player) {
+	char arguments[64][64];
+	memcpy(arguments, arguments_ptr, sizeof(char[64][64]));
+
+	if (!arguments[1][0]) {
+		sendMessage(0, player->playerId, "&c/paint requires a paremeter, 'on' or 'off'.");
+		return 1;
+	}
+
+	if (strcmp(arguments[1], "on") == 0) {
+		player->paint = 1;
+		sendMessage(0, player->playerId, "Paint mode on.");
+	} else if (strcmp(arguments[1], "off") == 0) {
+		player->paint = 0;
+		sendMessage(0, player->playerId, "Paint mode off.");
+	} else {
+		sendMessage(0, player->playerId, "&cPaint mode must be either 'on' or 'off'.");
+		return 1;
+	}
+
+	return 0;
+}
+
 int loadcommand(const char* name, void* function, const char* description) {
 	for (int i = 0; i < MAX; ++i) {
 		if (strcmp(name, commands.name[i]) == 0) {
@@ -391,12 +441,14 @@ void loadcommands() {
 	loadcommand("list",    &command_list,    "");
 	loadcommand("stop",    &command_stop,    "&c(OP)");
 	loadcommand("kick",    &command_kick,    "&e[username] [reason] &c(OP)");
-	loadcommand("op",  	   &command_op,      "&e[username] &c(OP)");
+	loadcommand("op",      &command_op,      "&e[username] &c(OP)");
 	loadcommand("deop",    &command_deop,    "&e[username] &c(OP)");
 	loadcommand("oplist",  &command_oplist,  "&c(OP)");
 	loadcommand("ban",     &command_ban,     "&e[username] &c(OP)");
 	loadcommand("unban",   &command_unban,   "&e[username] &c(OP)");
 	loadcommand("banlist", &command_banlist, "&c(OP)");
+	loadcommand("me",      &command_me,      "");
+	loadcommand("paint",   &command_paint,   "&e[on/off]");
 }
 
 int invokecommand(const char* name, char (*arguments_ptr)[64][64], player_t* player) {

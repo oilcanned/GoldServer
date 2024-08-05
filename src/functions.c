@@ -65,6 +65,7 @@ void onExit(int test) {
 		if (worlds[i].name) {
 			if (saveworld(i, 0) == 1)
 				while (saveworld(i, 1));
+			free(worlds[i].name);
 		}
 	}
 
