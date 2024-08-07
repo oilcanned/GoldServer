@@ -92,11 +92,13 @@
 #elif _WIN32
 	DWORD WINAPI ping(void* arg) {
 #endif
-	int     sock = *(int*)arg;
+	int     id   = *(int*)arg;
 	uint8_t ping = 0x01;
 
-	while (1) {
-		send(sock, &ping, 1, 0);
+	while (players[id].sock) {
+		if (players[id].sock)
+			send(players[id].sock, &ping, 1, 0);
+
 		#ifdef __linux__
 			sleep(20);
 		#elif _WIN32

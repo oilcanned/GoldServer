@@ -93,6 +93,7 @@ int sendMessage(int type, int id, const char* message) {
 				server0x0d.message[63] = 32;
 			}
 
+			if (players[id].sock)
 			send(players[id].sock, (char*)&server0x0d, sizeof(server0x0d), 0);
 			memset(server0x0d.message, 32, sizeof(server0x0d.message));
 		}
@@ -147,6 +148,7 @@ int disconnectPlayer(int id, const char* message) {
 
 	memset(server0x0e.disconnectReason, 32, sizeof(server0x0e.disconnectReason));
 	padcpy(server0x0e.disconnectReason, message);
+	if (players[id].sock)
 	send(players[id].sock, (char*)&server0x0e, sizeof(server0x0e), 0);
 
 	close(players[id].sock);
@@ -220,6 +222,7 @@ int makeOp(int id, const char* username) {
 			if (line[i] == 10)
 				line[i] = 0;
 		if (strcmp(line, username) == 0) {
+			if (players[id].sock)
 			sendMessage(0, id, "User is already opped!");
 			return 1;
 		}
@@ -245,6 +248,7 @@ int makeOp(int id, const char* username) {
 			struct server0x0f_t server0x0f;
 			server0x0f.packetId = 0x0f;
 			server0x0f.userType = 0x64;
+			if  (players[i].sock)
 			send(players[i].sock, (char*)&server0x0f, sizeof(server0x0f), 0);
 			sendMessage(0, i, "&aYou have been opped!");
 		}
@@ -306,6 +310,7 @@ int deOp(int id, const char* username) {
 			struct server0x0f_t server0x0f;
 			server0x0f.packetId = 0x0f;
 			server0x0f.userType = 0x00;
+			if  (players[i].sock)
 			send(players[i].sock, (char*)&server0x0f, sizeof(server0x0f), 0);
 			sendMessage(0, i, "&cYou have been deopped!");
 		}

@@ -8,5 +8,5 @@
 #elif _WIN32
 	DWORD WINAPI heartbeat(void* arg);
 	DWORD WINAPI autosaver(void* arg);
-	DWORD WINAPI ping     (void* arg)
+	DWORD WINAPI ping     (void* arg);
 #endif

@@ -220,6 +220,7 @@ int sendworld(int16_t newWorldId, int16_t playerId) {
 	server0x07.packetId = 0x07;
 	server0x0e.packetId = 0x0e;
 
+	if (players[playerId].sock)
 	send(players[playerId].sock, (char*)&server0x02, sizeof(server0x02), 0);
 
 	// world stuff here!
@@ -243,6 +244,7 @@ int sendworld(int16_t newWorldId, int16_t playerId) {
 			if (i > 0 && i % 1024 == 0 || i == length - 1) {
 				server0x03.chunkLength	   = htons((int16_t)1024);
 				server0x03.percentComplete = round((i / length) * 100);
+				if (players[playerId].sock)
 				send(players[playerId].sock, (char*)&server0x03, sizeof(server0x03), 0);
 				memset(server0x03.chunkData, 0, CHUNK_SIZE);
 			}
@@ -257,6 +259,7 @@ int sendworld(int16_t newWorldId, int16_t playerId) {
 	server0x04.xSize = htons(worlds[players[playerId].currentWorldId].xSize);
 	server0x04.ySize = htons(worlds[players[playerId].currentWorldId].ySize);
 	server0x04.zSize = htons(worlds[players[playerId].currentWorldId].zSize);
+	if (players[playerId].sock)
 	send(players[playerId].sock, (char*)&server0x04, sizeof(server0x04), 0);
 
 	// To alert everyone and the player:
@@ -267,6 +270,7 @@ int sendworld(int16_t newWorldId, int16_t playerId) {
 	server0x07.z = htons((worlds[players[playerId].currentWorldId].zSize  / 2) * 32);
 	server0x07.yaw = 0;
 	server0x07.pitch = 0;
+	if (players[playerId].sock)
 	send(players[playerId].sock, (char*)&server0x07, sizeof(server0x07), 0);
 
 	for (int i = 0; i < MAX; ++i) { // TO THE PLAYER
@@ -278,6 +282,7 @@ int sendworld(int16_t newWorldId, int16_t playerId) {
 			server0x07.z = 0;
 			server0x07.yaw = 0;
 			server0x07.pitch = 0;
+			if (players[playerId].sock)
 			send(players[playerId].sock, (char*)&server0x07, sizeof(server0x07), 0);
 		}
 	}
@@ -291,6 +296,7 @@ int sendworld(int16_t newWorldId, int16_t playerId) {
 	server0x07.pitch = 0;
 	for (int i = 0; i < MAX; ++i) { // FROM THE PLAYER
 		if (players[i].sock && i != playerId) {
+			if  (players[i].sock)
 			send(players[i].sock, (char*)&server0x07, sizeof(server0x07), 0);
 		}
 	}
@@ -298,7 +304,7 @@ int sendworld(int16_t newWorldId, int16_t playerId) {
 	// Finally, it will send all the block updates.
 
 	for (int i = 0; i < MAX_BLOCK_UPDATES; ++i)
-		if (worlds[players[playerId].currentWorldId].blockChanges[i].packetId)
+		if (worlds[players[playerId].currentWorldId].blockChanges[i].packetId && players[playerId].sock)
 			send(players[playerId].sock, (char*)&worlds[players[playerId].currentWorldId].blockChanges[i], 
 								   sizeof(worlds[players[playerId].currentWorldId].blockChanges[i]), 0);
 		else
