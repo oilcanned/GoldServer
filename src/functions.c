@@ -39,12 +39,12 @@ char* padcpy(char* dest, const char* src) {
 }
 
 char* unpad(char* src) {
-	for (int i = 63; i > 0; --i) 
+	for (int i = 63; i > 0; --i) {
 		if (src[i] == 32)
 			src[i] = 0;
 		else
 			break;
-
+	}
 	return src;
 }
 

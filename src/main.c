@@ -74,6 +74,7 @@
 	struct client0x0d_t client0x0d;
 	struct client0x10_t client0x10;
 	struct client0x11_t client0x11;
+	client0x00.protocolVersion = 0x00;
 
 	// Create server structures. 
 	// Only ones being used in this function are created.
@@ -100,8 +101,9 @@
 			players[id].sock = 0;
 			server0x0c.playerId = id;
 
+			char buffer[64];
+
 			if (players[id].username[0]) {
-				char buffer[64];
 				strcpy(buffer, "&e");
 				strcat(buffer, unpad(players[id].username));
 				strcat(buffer, " left the server.");
@@ -111,9 +113,9 @@
 						sendMessage(0, i, buffer);
 						send(players[i].sock, (char*)&server0x0c, sizeof(server0x0c), 0);
 					}
-				
-				printMessage(buffer);
 			}
+
+			printMessage(buffer);
 			
 			memset(players[id].username, 0, 64);
 			pthread_exit(NULL);
@@ -150,6 +152,9 @@
 		top:
 		switch (packetId) {
 			case 0x00:
+				if (client0x00.protocolVersion)
+					break;
+
 				if (recv(players[id].sock, (char*)&client0x00, sizeof(client0x00), MSG_WAITALL) <= 0)
 					break;
 				
@@ -167,8 +172,8 @@
 				#endif
 
 				if (!server_info.cracked) {
-					char tempUsername[64];
-					memcpy(tempUsername, client0x00.username, 64);
+					char tempUsername[sizeof(client0x00.username)];
+					memcpy(tempUsername, client0x00.username, sizeof(client0x00.username));
 					unpad(tempUsername);
 
 					char saltAndName[strlen(server_info.salt) + strlen(tempUsername) + 1];
@@ -207,8 +212,8 @@
 				}
 
 				if (client0x00.protocolVersion != 0x07) {
-					close(players[id].sock);
-					players[id].sock = 0;
+					disconnectPlayer(id, "Invalid protocol version.");
+					printf("%d, %c\n", client0x00.protocolVersion, client0x00.protocolVersion);
 					pthread_exit(NULL);
 				}
 
@@ -321,6 +326,16 @@
 				}
 
 				break;
+			case 0x01:
+				{
+					uint8_t packet0x01;
+					packet0x01 = 0x01;
+
+					if (players[id].sock)
+						send(players[id].sock, &packet0x01, 1, 0);
+					
+					break;
+				}
 			case 0x05:
 				if (recv(players[id].sock, (char*)&client0x05, sizeof(client0x05), MSG_WAITALL) <= 0)
 					break;
